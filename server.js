@@ -1,22 +1,24 @@
 import http from "http";
 import fs from "fs";
 
-const server = http.createServer((req, res) => {
+const server = http.createServer((request, response) => {
 
     let filePath = "./public/index.html";
 
-    if (req.url === "/provider") { filePath = "./public/provider.html"; }
-    if (req.url === "/client") { filePath = "./public/client.html"; }
+    if (request.url === "/provider") { filePath = "./public/provider.html"; }
+    if (request.url === "/client") { filePath = "./public/client.html"; }
 
+    // reads the file with file system
     fs.readFile(filePath, (err, content) => {
         if (err) {
-            res.writeHead(500);
-            res.end("Server error");
+            response.writeHead(500);
+            response.end("Server error");
             return;
         }
 
-        res.writeHead(200, { "Content-Type": "text/html" });
-        res.end(content);
+        // no error - serve up the page
+        response.writeHead(200, { "Content-Type": "text/html" });
+        response.end(content);
     });
 });
 
